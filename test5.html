@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Азимбек & Севинч · 13.06.2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@1,300&display=swap" rel="stylesheet">
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  html, body {
+    width: 100%;
+    min-height: 100%;
+    background: #1a1410;
+    font-family: 'Cinzel', serif;
+  }
+
+  body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    min-height: 100dvh;
+    padding: 0;
+  }
+
+  .card {
+    position: relative;
+    width: 100%;
+    max-width: 480px;
+    line-height: 0;
+    background: #000;
+    overflow: hidden;
+    box-shadow: none;
+  }
+
+  /* Контейнер для плавного перехода между видео и финальной фотографией */
+  .visual-container {
+    position: relative;
+    width: 100%;
+    background: #1a1410;
+  }
+
+  .visual-container video,
+  .visual-container img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+    transition: opacity 1.2s cubic-bezier(0.25, 0.95, 0.4, 1); /* Очень плавный переход */
+  }
+
+  /* Видео поверх, оно будет плавно исчезать */
+  .visual-container video {
+    position: relative;
+    z-index: 2;
+    opacity: 1;
+  }
+
+  /* Финальная фотка под видео, будет проявляться */
+  .visual-container .final-photo {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    opacity: 0;
+  }
+
+  /* После завершения анимации видео скрывается, финальное фото становится видимым */
+  .visual-container.video-finished video {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .visual-container.video-finished .final-photo {
+    opacity: 1;
+  }
+
+  .fade {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 38%;
+    background: linear-gradient(to top,
+      rgba(26,20,16,0.85) 0%,
+      rgba(26,20,16,0.4) 55%,
+      transparent 100%);
+    pointer-events: none;
+    z-index: 3;
+  }
+
+  .btn-wrapper {
+    position: absolute;
+    bottom: 9%;
+    left: 50%;
+    transform: translateX(-50%) translateY(0);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    z-index: 20;
+  }
+
+  .btn-wrapper.visible {
+    visibility: visible;
+    animation: riseGentle 0.95s cubic-bezier(0.22, 0.85, 0.36, 1) forwards;
+  }
+
+  @keyframes riseGentle {
+    0% {
+      opacity: 0;
+      transform: translateX(-50%) translateY(20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+  }
+
+  .thread {
+    width: 0.5px;
+    height: 36px;
+    background: linear-gradient(to bottom, transparent, rgba(210,185,120,0.5));
+    transform-origin: top;
+    transform: scaleY(0);
+    transition: transform 0.5s cubic-bezier(0.2, 0.9, 0.4, 1.1) 0.1s;
+  }
+
+  .btn-wrapper.visible .thread {
+    transform: scaleY(1);
+  }
+
+  .jewel {
+    width: 6px;
+    height: 6px;
+    background: rgba(210,175,85,0.7);
+    transform: rotate(45deg) scale(0);
+    margin: 5px 0 8px;
+    transition: transform 0.35s cubic-bezier(0.34, 1.5, 0.64, 1) 0.25s;
+  }
+
+  .btn-wrapper.visible .jewel {
+    transform: rotate(45deg) scale(1);
+  }
+
+  .open-btn {
+    font-family: 'Cinzel', serif;
+    font-size: 8.5px;
+    font-weight: 500;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    color: #f5efdf;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    outline: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 9px;
+  }
+
+  .btn-text-wrap {
+    position: relative;
+    padding: 11px 38px;
+  }
+
+  .btn-label {
+    opacity: 0;
+    transition: opacity 0.4s ease 0.3s;
+    letter-spacing: 5px;
+  }
+
+  .btn-wrapper.visible .btn-label {
+    opacity: 1;
+  }
+
+  .open-btn:active {
+    transform: scale(0.97);
+  }
+
+  .btn-date {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-weight: 300;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: rgba(225,200,150,0);
+    transition: color 0.5s ease 0.45s;
+  }
+
+  .btn-wrapper.visible .btn-date {
+    color: rgba(225,200,145,0.7);
+  }
+
+  .ornament {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 12px;
+    opacity: 0;
+    transition: opacity 0.5s ease 0.6s;
+  }
+
+  .btn-wrapper.visible .ornament {
+    opacity: 1;
+  }
+
+  .orn-l {
+    width: 24px;
+    height: 0.5px;
+    background: rgba(200,175,115,0.4);
+  }
+
+  .orn-d {
+    width: 5px;
+    height: 5px;
+    background: rgba(200,170,100,0.6);
+    transform: rotate(45deg);
+  }
+
+  .orn-c {
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: rgba(210,180,110,0.5);
+  }
+
+  /* Лайтбокс без рамок */
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    background: rgba(5, 4, 3, 0.98);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.45s ease;
+    padding: 20px;
+  }
+
+  .lightbox.on {
+    opacity: 1;
+  }
+
+  .lb-inner {
+    width: min(92vw, 460px);
+    overflow: hidden;
+    transform: scale(0.94) translateY(12px);
+    transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+    background: #000;
+  }
+
+  .lightbox.on .lb-inner {
+    transform: scale(1) translateY(0);
+  }
+
+  .lb-inner video,
+  .lb-inner img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .lb-close {
+    position: absolute;
+    top: max(22px, env(safe-area-inset-top, 22px));
+    right: 22px;
+    font-family: 'Cinzel', serif;
+    font-size: 8px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: rgba(230,210,165,0.6);
+    background: none;
+    border: none;
+    padding: 9px 18px;
+    cursor: pointer;
+  }
+
+  .lb-close:active {
+    color: rgba(245,225,170,0.9);
+  }
+
+  .ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(220,185,100,0.35) 0%, rgba(200,160,70,0.08) 80%);
+    transform: scale(0);
+    animation: rplAnim 0.55s ease-out forwards;
+    pointer-events: none;
+  }
+
+  @keyframes rplAnim {
+    to {
+      transform: scale(5);
+      opacity: 0;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <div class="visual-container" id="visualContainer">
+    <!-- Видео, которое будет проигрываться и затем плавно исчезнет -->
+    <video id="bgVideo" autoplay muted playsinline>
+      <source src="video1.mp4" type="video/mp4">
+    </video>
+    <!-- Новая финальная фотография, которая плавно проявится после анимации -->
+    <img class="final-photo" id="finalPhoto" src="https://i.postimg.cc/X7qk7Twn/13d9520e-dae1-4b64-b7b4-9fc4bd331b1d.png" alt="Азимбек и Севинч">
+  </div>
+  <div class="fade"></div>
+
+  <div class="btn-wrapper" id="btnWrapper">
+    <div class="thread"></div>
+    <div class="jewel"></div>
+    <button class="open-btn" id="openBtn">
+      <div class="btn-text-wrap">
+        <span class="btn-label">Открыть приглашение</span>
+      </div>
+      <div class="btn-date">13 · 06 · 2026</div>
+    </button>
+    <div class="ornament">
+      <div class="orn-l"></div>
+      <div class="orn-c"></div>
+      <div class="orn-d"></div>
+      <div class="orn-c"></div>
+      <div class="orn-l"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  (function() {
+    const btnWrapper = document.getElementById('btnWrapper');
+    const openBtn = document.getElementById('openBtn');
+    const video = document.getElementById('bgVideo');
+    const visualContainer = document.getElementById('visualContainer');
+    const finalPhoto = document.getElementById('finalPhoto');
+
+    // Функция для плавного завершения видео и показа финальной фотографии
+    function finishVideoAndShowPhoto() {
+      if (visualContainer && !visualContainer.classList.contains('video-finished')) {
+        visualContainer.classList.add('video-finished');
+        // Небольшая задержка, чтобы убедиться, что видео остановлено
+        if (video) {
+          video.pause();
+        }
+        console.log('Видео завершено, финальное фото проявилось плавно');
+      }
+    }
+
+    // Настройка перехода видео к финальному фото
+    if (video) {
+      // Когда видео заканчивается — запускаем плавный переход
+      video.addEventListener('ended', function() {
+        finishVideoAndShowPhoto();
+      });
+
+      // Фолбек по времени: если видео длится слишком долго или не имеет события ended,
+      // запускаем переход через 7 секунд (анимация закончится плавно)
+      // Это гарантирует, что фото появится в любом случае
+      const maxDuration = 7000; // 7 секунд видео достаточно для анимации
+      const fallbackTimer = setTimeout(function() {
+        if (visualContainer && !visualContainer.classList.contains('video-finished')) {
+          finishVideoAndShowPhoto();
+        }
+      }, maxDuration);
+
+      // Если видео загрузилось и мы знаем его длительность, подстраиваемся
+      video.addEventListener('loadedmetadata', function() {
+        const duration = video.duration * 1000;
+        if (duration > 0 && duration < maxDuration) {
+          // Если длительность видео меньше 7 секунд, очищаем фолбек и используем естественное ended
+          clearTimeout(fallbackTimer);
+          // Но на всякий случай, если ended не сработает, оставляем свой таймер
+          const safeTimer = setTimeout(function() {
+            if (visualContainer && !visualContainer.classList.contains('video-finished')) {
+              finishVideoAndShowPhoto();
+            }
+          }, duration + 500);
+          // Сохраняем таймер, чтобы можно было отменить при ended
+          video._safeTimer = safeTimer;
+          video.addEventListener('ended', function() {
+            if (video._safeTimer) clearTimeout(video._safeTimer);
+          });
+        }
+      });
+
+      // Если видео не может загрузиться — показываем фото сразу
+      video.addEventListener('error', function() {
+        clearTimeout(fallbackTimer);
+        finishVideoAndShowPhoto();
+      });
+
+      // Попытка запустить видео
+      video.play().catch(function(e) {
+        console.log('Автовоспроизведение заблокировано, показываем фото', e);
+        finishVideoAndShowPhoto();
+      });
+    } else {
+      // Если видео нет — сразу финальное фото
+      finishVideoAndShowPhoto();
+    }
+
+    // Появление кнопки через 8 секунд
+    setTimeout(function() {
+      if (btnWrapper) {
+        btnWrapper.classList.add('visible');
+      }
+    }, 8000);
+
+    // Ripple эффект для кнопки
+    function addRipple(e) {
+      const rect = openBtn.getBoundingClientRect();
+      const ripple = document.createElement('span');
+      ripple.className = 'ripple';
+      const size = Math.max(rect.width, rect.height) * 1.6;
+      
+      let clientX, clientY;
+      if (e.touches) {
+        clientX = e.touches[0].clientX;
+        clientY = e.touches[0].clientY;
+      } else {
+        clientX = e.clientX;
+        clientY = e.clientY;
+      }
+      
+      const left = clientX - rect.left - size / 2;
+      const top = clientY - rect.top - size / 2;
+      
+      ripple.style.cssText = `width:${size}px;height:${size}px;left:${left}px;top:${top}px;position:absolute;`;
+      openBtn.style.position = 'relative';
+      openBtn.style.overflow = 'hidden';
+      openBtn.appendChild(ripple);
+      
+      setTimeout(function() {
+        if (ripple && ripple.remove) ripple.remove();
+        if (openBtn) openBtn.style.overflow = '';
+      }, 600);
+    }
+
+    // Открыть лайтбокс (без рамок)
+    function openLightbox() {
+      const lb = document.createElement('div');
+      lb.className = 'lightbox';
+      const inner = document.createElement('div');
+      inner.className = 'lb-inner';
+      
+      // Показываем финальное фото в увеличенном виде
+      const lbImg = document.createElement('img');
+      lbImg.src = 'https://i.postimg.cc/X7qk7Twn/13d9520e-dae1-4b64-b7b4-9fc4bd331b1d.png';
+      lbImg.alt = 'Азимбек и Севинч';
+      lbImg.style.width = '100%';
+      lbImg.style.height = 'auto';
+      
+      inner.appendChild(lbImg);
+      
+      const closeBtn = document.createElement('button');
+      closeBtn.className = 'lb-close';
+      closeBtn.textContent = 'Закрыть';
+      lb.appendChild(inner);
+      lb.appendChild(closeBtn);
+      document.body.appendChild(lb);
+      
+      requestAnimationFrame(function() {
+        requestAnimationFrame(function() {
+          lb.classList.add('on');
+        });
+      });
+      
+      function closeLightbox() {
+        lb.classList.remove('on');
+        setTimeout(function() {
+          if (lb && lb.remove) lb.remove();
+        }, 450);
+      }
+      
+      closeBtn.addEventListener('click', closeLightbox);
+      lb.addEventListener('click', function(e) {
+        if (e.target === lb) closeLightbox();
+      });
+      
+      document.addEventListener('keydown', function escHandler(e) {
+        if (e.key === 'Escape') {
+          closeLightbox();
+          document.removeEventListener('keydown', escHandler);
+        }
+      });
+    }
+
+    let isOpening = false;
+    
+    function handleClick(e) {
+      if (isOpening) return;
+      isOpening = true;
+      addRipple(e);
+      setTimeout(function() {
+        openLightbox();
+        setTimeout(function() { isOpening = false; }, 500);
+      }, 120);
+    }
+    
+    if (openBtn) {
+      openBtn.addEventListener('click', handleClick);
+      openBtn.addEventListener('touchstart', handleClick);
+    }
+    
+    // Фолбэк для кнопки: если не появилась через 8.5 сек
+    setTimeout(function() {
+      if (btnWrapper && !btnWrapper.classList.contains('visible')) {
+        btnWrapper.classList.add('visible');
+      }
+    }, 8500);
+  })();
+</script>
+</body>
+</html>
