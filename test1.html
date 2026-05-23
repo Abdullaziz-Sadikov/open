@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -24,6 +23,7 @@ body {
   min-height: 100vh;
   min-height: 100dvh;
   padding: 0;
+  position: relative;
 }
 
 .card {
@@ -168,6 +168,62 @@ body {
 .orn-d { width: 4px; height: 4px; background: rgba(115,88,40,0.26); transform: rotate(45deg); }
 .orn-c { width: 2px; height: 2px; border-radius: 50%; background: rgba(110,84,38,0.2); }
 
+/* ── КНОПКА "ДАЛЕЕ" СВЕРХУ (стилизована под общий дизайн) ── */
+.top-nav {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 100;
+  font-family: 'Cinzel', serif;
+  font-size: 8px;
+  font-weight: 500;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: #3d2e1c;
+  background: rgba(235,230,222,0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 0.5px solid rgba(110,82,38,0.25);
+  border-radius: 40px;
+  padding: 8px 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.top-nav:hover {
+  background: rgba(235,230,222,0.9);
+  border-color: rgba(110,82,38,0.5);
+  letter-spacing: 5px;
+  transform: translateY(-1px);
+}
+
+.top-nav:active {
+  transform: translateY(1px);
+}
+
+.top-nav span:first-child {
+  font-size: 10px;
+}
+
+/* Адаптив для маленьких экранов */
+@media (max-width: 550px) {
+  .top-nav {
+    top: 14px;
+    right: 14px;
+    padding: 6px 16px;
+    font-size: 7px;
+    letter-spacing: 3px;
+  }
+  .top-nav span:first-child {
+    font-size: 9px;
+  }
+}
+
 /* ── RIPPLE ЭФФЕКТ ── */
 .ripple {
   position: absolute;
@@ -181,6 +237,12 @@ body {
 </style>
 </head>
 <body>
+
+<!-- КНОПКА "ДАЛЕЕ" СВЕРХУ — ведёт на test1.html -->
+<a href="test1.html" class="top-nav" id="nextBtn">
+  <span>→</span>
+  <span>Далее</span>
+</a>
 
 <div class="card">
   <img src="https://i.postimg.cc/SRn0rgzP/f6c4834d-4c4a-4fdf-902b-a90b6567cd63.png" alt="Азимбек & Севинч" />
@@ -209,30 +271,30 @@ body {
 const btn = document.getElementById('openBtn');
 setTimeout(() => btn.classList.add('on'), 1800);
 
-// Эффект ряби при клике
-function ripple(e) {
-  const rect = btn.getBoundingClientRect();
+// Эффект ряби при клике на главную кнопку
+function ripple(e, element) {
+  const rect = element.getBoundingClientRect();
   const r = document.createElement('span');
   r.className = 'ripple';
   const s = Math.max(rect.width, rect.height) * 1.5;
   const cx = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left - s/2;
   const cy = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top - s/2;
   r.style.cssText = `width:${s}px;height:${s}px;left:${cx}px;top:${cy}px`;
-  btn.style.overflow = 'hidden';
-  btn.appendChild(r);
-  setTimeout(() => { r.remove(); btn.style.overflow = ''; }, 600);
+  element.style.overflow = 'hidden';
+  element.appendChild(r);
+  setTimeout(() => { r.remove(); element.style.overflow = ''; }, 600);
 }
 
-// Переход на test2.html (с сохранением ripple эффекта)
+// Переход на test2.html (основная кнопка)
 btn.addEventListener('click', (e) => {
   e.preventDefault();
-  ripple(e);
+  ripple(e, btn);
   setTimeout(() => {
     window.location.href = 'test2.html';
   }, 150);
 });
 
-btn.addEventListener('touchstart', (e) => ripple(e), { passive: true });
+btn.addEventListener('touchstart', (e) => ripple(e, btn), { passive: true });
 
 // Предзагрузка изображения
 new Image().src = 'https://i.postimg.cc/SRn0rgzP/f6c4834d-4c4a-4fdf-902b-a90b6567cd63.png';
