@@ -14,7 +14,6 @@ html, body {
   font-family: 'Cinzel', serif;
 }
 
-/* страница центрирует карточку */
 body {
   display: flex;
   flex-direction: column;
@@ -29,18 +28,16 @@ body {
 .card {
   position: relative;
   width: 100%;
-  max-width: 480px;   /* телефонная ширина */
+  max-width: 480px;
   line-height: 0;
 }
 
-/* фото полностью без обрезки */
 .card img {
   width: 100%;
   height: auto;
   display: block;
 }
 
-/* дымка снизу поверх фото */
 .fade {
   position: absolute;
   bottom: 0; left: 0; right: 0;
@@ -52,7 +49,6 @@ body {
   pointer-events: none;
 }
 
-/* кнопка — абсолютно по центру нижней части */
 .btn-wrapper {
   position: absolute;
   bottom: 7%;
@@ -168,7 +164,7 @@ body {
 .orn-d { width: 4px; height: 4px; background: rgba(115,88,40,0.26); transform: rotate(45deg); }
 .orn-c { width: 2px; height: 2px; border-radius: 50%; background: rgba(110,84,38,0.2); }
 
-/* ── КНОПКА "ДАЛЕЕ" СВЕРХУ (стилизована под общий дизайн) ── */
+/* КНОПКА "ДАЛЕЕ" СВЕРХУ */
 .top-nav {
   position: fixed;
   top: 20px;
@@ -210,7 +206,6 @@ body {
   font-size: 10px;
 }
 
-/* Адаптив для маленьких экранов */
 @media (max-width: 550px) {
   .top-nav {
     top: 14px;
@@ -224,7 +219,6 @@ body {
   }
 }
 
-/* ── RIPPLE ЭФФЕКТ ── */
 .ripple {
   position: absolute;
   border-radius: 50%;
@@ -238,8 +232,8 @@ body {
 </head>
 <body>
 
-<!-- КНОПКА "ДАЛЕЕ" СВЕРХУ — ведёт на test1.html -->
-<a href="test1.html" class="top-nav" id="nextBtn">
+<!-- КНОПКА "ДАЛЕЕ" - ПЕРЕХОД НА test2.html -->
+<a href="test2.html" class="top-nav" id="nextBtn">
   <span>→</span>
   <span>Далее</span>
 </a>
@@ -269,9 +263,13 @@ body {
 
 <script>
 const btn = document.getElementById('openBtn');
-setTimeout(() => btn.classList.add('on'), 1800);
 
-// Эффект ряби при клике на главную кнопку
+// Добавляем класс on для анимации уголков
+setTimeout(() => {
+  if (btn) btn.classList.add('on');
+}, 1800);
+
+// Эффект ряби для кнопки "Открыть приглашение"
 function ripple(e, element) {
   const rect = element.getBoundingClientRect();
   const r = document.createElement('span');
@@ -280,21 +278,41 @@ function ripple(e, element) {
   const cx = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left - s/2;
   const cy = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top - s/2;
   r.style.cssText = `width:${s}px;height:${s}px;left:${cx}px;top:${cy}px`;
+  element.style.position = 'relative';
   element.style.overflow = 'hidden';
   element.appendChild(r);
-  setTimeout(() => { r.remove(); element.style.overflow = ''; }, 600);
+  setTimeout(() => { 
+    if (r && r.remove) r.remove(); 
+    element.style.overflow = '';
+  }, 600);
 }
 
-// Переход на test2.html (основная кнопка)
-btn.addEventListener('click', (e) => {
-  e.preventDefault();
-  ripple(e, btn);
-  setTimeout(() => {
-    window.location.href = 'test2.html';
-  }, 150);
-});
+// Кнопка "Открыть приглашение"
+if (btn) {
+  btn.addEventListener('click', (e) => {
+    e.preventDefault();
+    ripple(e, btn);
+    setTimeout(() => {
+      window.location.href = 'test2.html';
+    }, 150);
+  });
+  btn.addEventListener('touchstart', (e) => ripple(e, btn), { passive: true });
+}
 
-btn.addEventListener('touchstart', (e) => ripple(e, btn), { passive: true });
+// Кнопка "Далее" - ПРОСТЕЙШИЙ ПЕРЕХОД
+// Она уже имеет href="test2.html", поэтому будет работать как обычная ссылка
+// Дополнительно добавляем ripple эффект для красоты
+const nextBtn = document.getElementById('nextBtn');
+if (nextBtn) {
+  nextBtn.addEventListener('click', (e) => {
+    ripple(e, nextBtn);
+    // Не отменяем переход, просто добавляем эффект
+    setTimeout(() => {
+      window.location.href = 'test2.html';
+    }, 100);
+    e.preventDefault();
+  });
+}
 
 // Предзагрузка изображения
 new Image().src = 'https://i.postimg.cc/SRn0rgzP/f6c4834d-4c4a-4fdf-902b-a90b6567cd63.png';
