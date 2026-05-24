@@ -153,7 +153,8 @@ body.revealed .section-header {
 }
 body.revealed .work-card { animation: cardReveal 0.5s ease forwards; }
 @keyframes cardReveal { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-.work-card:active { transform: scale(0.97); border-color: rgba(201,169,110,0.3); }
+.work-card:hover { transform: translateY(-5px); border-color: rgba(201,169,110,0.3); }
+.work-card:active { transform: scale(0.97); }
 .card-preview {
   position: relative;
   height: 180px;
@@ -161,6 +162,7 @@ body.revealed .work-card { animation: cardReveal 0.5s ease forwards; }
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
 }
 .work-num {
   font-family: 'Cormorant Garamond', serif;
@@ -169,6 +171,11 @@ body.revealed .work-card { animation: cardReveal 0.5s ease forwards; }
   font-style: italic;
   color: rgba(201,169,110,0.12);
 }
+.preview-icon {
+  position: absolute;
+  font-size: 2.5rem;
+  opacity: 0.15;
+}
 .work-label-big {
   font-family: 'Cinzel', serif;
   font-size: 0.55rem;
@@ -176,6 +183,9 @@ body.revealed .work-card { animation: cardReveal 0.5s ease forwards; }
   color: rgba(201,169,110,0.45);
   position: absolute;
   bottom: 12px;
+  left: 0;
+  right: 0;
+  text-align: center;
 }
 .preview-dots {
   position: absolute;
@@ -186,7 +196,7 @@ body.revealed .work-card { animation: cardReveal 0.5s ease forwards; }
   background: linear-gradient(to top, var(--card), transparent);
 }
 .card-body { padding: 16px; }
-.work-title { font-family: 'Cinzel', serif; font-size: 0.7rem; letter-spacing: 0.3em; color: var(--gold2); margin-bottom: 10px; }
+.work-title { font-family: 'Cinzel', serif; font-size: 0.7rem; letter-spacing: 0.3em; color: var(--gold2); margin-bottom: 10px; line-height: 1.3; }
 .card-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
 .tag {
   background: rgba(201,169,110,0.07);
@@ -221,20 +231,20 @@ body.revealed .work-card { animation: cardReveal 0.5s ease forwards; }
   transition: background 0.3s ease, visibility 0.3s;
 }
 #modal.open {
-  background: rgba(0,0,0,0.9);
+  background: rgba(0,0,0,0.95);
   visibility: visible;
 }
 .modal-inner {
   position: relative;
-  width: 92%;
-  max-width: 400px;
-  height: 80vh;
+  width: 94%;
+  max-width: 420px;
+  height: 85vh;
   background: #fff;
   border-radius: 24px;
   overflow: hidden;
-  transform: scale(0.9);
+  transform: scale(0.92);
   opacity: 0;
-  transition: transform 0.3s ease, opacity 0.3s ease;
+  transition: transform 0.35s cubic-bezier(0.2, 0.9, 0.4, 1), opacity 0.3s ease;
   display: flex;
   flex-direction: column;
 }
@@ -248,7 +258,7 @@ body.revealed .work-card { animation: cardReveal 0.5s ease forwards; }
   left: 0;
   right: 0;
   height: 50px;
-  background: linear-gradient(to bottom, rgba(0,0,0,0.6), transparent);
+  background: linear-gradient(to bottom, rgba(0,0,0,0.5), transparent);
   z-index: 100;
   display: flex;
   align-items: center;
@@ -256,12 +266,12 @@ body.revealed .work-card { animation: cardReveal 0.5s ease forwards; }
   padding: 8px 12px;
   pointer-events: none;
 }
-.modal-work-label { font-family: 'Cinzel', serif; font-size: 0.5rem; letter-spacing: 0.35em; color: rgba(255,255,255,0.8); }
+.modal-work-label { font-family: 'Cinzel', serif; font-size: 0.55rem; letter-spacing: 0.35em; color: rgba(255,255,255,0.9); }
 .modal-close {
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: rgba(0,0,0,0.6);
+  background: rgba(0,0,0,0.5);
   border: none;
   color: white;
   font-size: 1.2rem;
@@ -270,6 +280,7 @@ body.revealed .work-card { animation: cardReveal 0.5s ease forwards; }
   align-items: center;
   justify-content: center;
   pointer-events: auto;
+  backdrop-filter: blur(4px);
 }
 .modal-close:active { transform: scale(0.92); }
 #modalFrame { flex: 1; width: 100%; border: none; background: #fff; }
@@ -285,7 +296,7 @@ body.revealed .work-card { animation: cardReveal 0.5s ease forwards; }
   z-index: 50;
   transition: opacity 0.3s ease;
 }
-.modal-loading.gone { opacity: 0; pointer-events: none; }
+.modal-loading.hidden { opacity: 0; pointer-events: none; }
 .loader-ring { width: 40px; height: 40px; border: 2px solid rgba(201,169,110,0.15); border-top-color: var(--gold); border-radius: 50%; animation: spin 0.8s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
 .loader-text { font-family: 'Cinzel', serif; font-size: 0.5rem; letter-spacing: 0.4em; color: var(--muted); }
@@ -312,7 +323,9 @@ body.revealed footer { opacity: 1; transform: translateY(0); }
   text-decoration: none;
   border-bottom: 1px solid rgba(201,169,110,0.2);
   padding-bottom: 3px;
+  transition: color 0.2s;
 }
+.footer-link:hover { color: var(--gold2); }
 .music-player {
   position: fixed;
   bottom: 20px;
@@ -340,6 +353,7 @@ body.revealed footer { opacity: 1; transform: translateY(0); }
   cursor: pointer;
   color: var(--gold);
   font-size: 0.75rem;
+  transition: transform 0.1s;
 }
 .player-btn:active { transform: scale(0.92); }
 .start-screen {
@@ -372,7 +386,9 @@ body.revealed footer { opacity: 1; transform: translateY(0); }
   color: var(--gold2);
   cursor: pointer;
   margin-top: 10px;
+  transition: all 0.2s;
 }
+.start-btn:hover { background: rgba(201,169,110,0.2); border-color: rgba(201,169,110,0.7); }
 .start-btn:active { transform: scale(0.96); }
 .start-screen.hide { opacity: 0; visibility: hidden; pointer-events: none; }
 </style>
@@ -447,7 +463,7 @@ body.revealed footer { opacity: 1; transform: translateY(0); }
       isPlaying = true;
       if (playPauseBtn) playPauseBtn.innerHTML = '⏸';
       if (musicPlayerDiv) musicPlayerDiv.classList.add('visible');
-    }).catch(function(e) { console.log("Автовоспроизведение заблокировано"); });
+    }).catch(function(e) { console.log("Автовоспроизведение заблокировано, нажмите на кнопку музыки"); });
   }
   
   function toggleMusic() {
@@ -481,48 +497,76 @@ body.revealed footer { opacity: 1; transform: translateY(0); }
     openBtn.addEventListener('click', openPortfolio);
   }
   
-  // ========== ВАШИ РАБОТЫ (ДОБАВЛЯЙТЕ СЮДА) ==========
-  // Укажите ВСЕ ваши папки с работами
+  // ========== ⚡ ПРОЕКТЫ — ЛЕГКО ДОБАВЛЯТЬ! ==========
+  // 🔸 КАК ДОБАВИТЬ НОВУЮ РАБОТУ:
+  // Скопируйте строчку ниже и вставьте в массив projects
+  // { folder: "work8", title: "НАЗВАНИЕ", tags: ["тег1", "тег2"], preview: "Краткое описание" }
+  // Где folder — это имя папки с вашей работой (папка лежит рядом с этим файлом)
+  
   const projects = [
     { folder: "work1", title: "OQ STYLE | Белый стиль", tags: ["Белый", "Акварель", "Минимализм"], preview: "Элегантное белое приглашение" },
     { folder: "work2", title: "NAVKAR | Для друзей жениха", tags: ["Navkar", "Классика", "Шик"], preview: "Стиль для друзей жениха" },
     { folder: "work3", title: "БАХОР | Вайб весны", tags: ["Весна", "Цветы", "Лепестки"], preview: "Нежное весеннее настроение" },
-    { folder: "work4", title: "OSHGA TAKLIFNOMA | Приглашение на плов", tags: ["Плов", "Семья", "Уют"], preview: "Тёплое приглашение на плов" },
+    { folder: "work4", title: "OSHGA TAKLIFNOMA", tags: ["Плов", "Семья", "Уют"], preview: "Тёплое приглашение на плов" },
     { folder: "work5", title: "MUSLIM STYLE", tags: ["Исламский стиль", "Дуа", "Барокко"], preview: "Духовная элегантность" },
-    { folder: "work6", title: "OSHGA TAKLIF 2 | Приглашение на плов 2", tags: ["Плов", "Гостеприимство", "Орнамент"], preview: "Щедрое приглашение на плов" },
-    { folder: "work7", title: "МИНИМАЛИСТИКА | Таклифнома", tags: ["Минимализм", "Чистота", "Типографика"], preview: "Лаконичное приглашение" }
-    { folder: "work8", title: "МИНИМАЛИСТИКА | Таклифнома", tags: ["Минимализм", "Чистота", "Типографика"], preview: "Лаконичное приглашение" }
-    // ===== ДОБАВЬТЕ НОВЫЕ РАБОТЫ СЮДА =====
-    // { folder: "work8", title: "НАЗВАНИЕ", tags: ["тег1", "тег2"], preview: "Описание" },
+    { folder: "work6", title: "OSHGA TAKLIF 2", tags: ["Плов", "Гостеприимство", "Орнамент"], preview: "Щедрое приглашение на плов" },
+    { folder: "work7", title: "МИНИМАЛИСТИКА", tags: ["Минимализм", "Чистота", "Типографика"], preview: "Лаконичное приглашение" },
+    
+    // ⬇️⬇️⬇️ НОВЫЕ РАБОТЫ ДОБАВЛЯЙТЕ СЮДА ⬇️⬇️⬇️
+    // { folder: "work8", title: "НОВАЯ РАБОТА", tags: ["тег1", "тег2"], preview: "Описание" },
+    // { folder: "work9", title: "ЕЩЁ ОДНА", tags: ["стиль", "цветы"], preview: "Красивое приглашение" },
   ];
   
+  // ========== РЕНДЕР СЕТКИ ==========
   const grid = document.getElementById('grid');
   const worksCountSpan = document.getElementById('worksCount');
   
   if (grid && worksCountSpan) {
     worksCountSpan.innerText = projects.length;
+    grid.innerHTML = '';
     
     projects.forEach(function(proj, idx) {
-      var num = idx + 1;
-      var card = document.createElement('div');
+      const num = idx + 1;
+      const numStr = num < 10 ? '0' + num : '' + num;
+      const card = document.createElement('div');
       card.className = 'work-card';
-      card.style.animationDelay = (idx * 0.03) + 's';
+      card.style.animationDelay = (idx * 0.04) + 's';
+      
+      // Иконка-превью в зависимости от типа
+      let previewIcon = '';
+      if (proj.title.toLowerCase().includes('плов')) previewIcon = '';
+      else if (proj.title.toLowerCase().includes('muslim')) previewIcon = '';
+      else if (proj.title.toLowerCase().includes('бахор') || proj.title.toLowerCase().includes('весн')) previewIcon = '';
+      else previewIcon = '';
+      
       card.innerHTML = `
         <div class="card-preview">
-          <div class="work-num">0${num}</div>
-          <div class="work-label-big">${proj.preview}</div>
+          <div class="work-num">${numStr}</div>
+          <div class="preview-icon">${previewIcon}</div>
+          <div class="work-label-big">${escapeHtml(proj.preview)}</div>
           <div class="preview-dots"></div>
         </div>
         <div class="card-body">
-          <div class="work-title">${proj.title}</div>
-          <div class="card-tags">${proj.tags.map(function(t) { return '<span class="tag">' + t + '</span>'; }).join('')}</div>
+          <div class="work-title">${escapeHtml(proj.title)}</div>
+          <div class="card-tags">${proj.tags.map(function(t) { return '<span class="tag">' + escapeHtml(t) + '</span>'; }).join('')}</div>
           <div class="card-hint"><span>Нажмите, чтобы открыть</span><span>→</span></div>
         </div>
       `;
-      card.addEventListener('click', function() {
-        openProject(proj.folder, proj.title);
-      });
+      card.addEventListener('click', (function(folder, title) {
+        return function() { openProject(folder, title); };
+      })(proj.folder, proj.title));
       grid.appendChild(card);
+    });
+  }
+  
+  // простая защита от XSS
+  function escapeHtml(str) {
+    if (!str) return '';
+    return str.replace(/[&<>]/g, function(m) {
+      if (m === '&') return '&amp;';
+      if (m === '<') return '&lt;';
+      if (m === '>') return '&gt;';
+      return m;
     });
   }
   
@@ -534,17 +578,21 @@ body.revealed footer { opacity: 1; transform: translateY(0); }
   const closeModalBtn = document.getElementById('closeModalBtn');
   
   function openProject(folderName, displayTitle) {
-    var path = './' + folderName + '/index.html';
+    const path = './' + folderName + '/index.html';
     if (modalLabel) modalLabel.innerText = displayTitle;
-    if (modalLoading) modalLoading.classList.remove('gone');
-    if (modalFrame) modalFrame.src = '';
+    if (modalLoading) modalLoading.classList.remove('hidden');
+    if (modalFrame) {
+      modalFrame.src = '';
+      modalFrame.src = path;
+    }
     if (modal) modal.classList.add('open');
     document.body.style.overflow = 'hidden';
-    if (modalFrame) modalFrame.src = path;
   }
   
   function onFrameLoad() {
-    setTimeout(function() { if (modalLoading) modalLoading.classList.add('gone'); }, 300);
+    setTimeout(function() { 
+      if (modalLoading) modalLoading.classList.add('hidden'); 
+    }, 350);
   }
   
   function closeModal() {
@@ -552,7 +600,7 @@ body.revealed footer { opacity: 1; transform: translateY(0); }
     document.body.style.overflow = '';
     setTimeout(function() {
       if (modalFrame) modalFrame.src = '';
-      if (modalLoading) modalLoading.classList.remove('gone');
+      if (modalLoading) modalLoading.classList.remove('hidden');
     }, 400);
   }
   
