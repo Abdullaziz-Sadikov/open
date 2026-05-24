@@ -30,6 +30,11 @@ body {
   color: var(--text);
   min-height: 100vh;
   overflow-x: hidden;
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+body.revealed {
+  opacity: 1;
 }
 
 body::before {
@@ -342,7 +347,7 @@ body.revealed .work-card {
   font-family: 'Cinzel', serif;
 }
 
-/* Анимированная кнопка-подсказка (не для клика, а для красоты) */
+/* Анимированная подсказка */
 .card-hint {
   display: flex;
   align-items: center;
@@ -689,7 +694,7 @@ body.revealed footer {
   <div class="site-sub">Электронные свадебные приглашения</div>
   <div class="header-rule">✦</div>
   <div class="stat-row">
-    <div class="stat"><div class="stat-num">7</div><div class="stat-label">Работ</div></div>
+    <div class="stat"><div class="stat-num">8</div><div class="stat-label">Работ</div></div>
     <div class="stat"><div class="stat-num">∞</div><div class="stat-label">Вдохновения</div></div>
     <div class="stat"><div class="stat-num">2025</div><div class="stat-label">Сезон</div></div>
   </div>
@@ -789,7 +794,7 @@ body.revealed footer {
     });
   }
   
-  // ГЛАВНАЯ КНОПКА
+  // ГЛАВНАЯ КНОПКА — ОТКРЫТЬ ПОРТФОЛИО
   function openPortfolio() {
     startMusic();
     if (startScreen) startScreen.classList.add('hide');
@@ -800,7 +805,7 @@ body.revealed footer {
     openBtn.addEventListener('click', openPortfolio);
   }
   
-  // ===================== КОНФИГ ПРОЕКТОВ =====================
+  // ===================== КОНФИГ ПРОЕКТОВ (ИСПРАВЛЕН) =====================
   const PROJECTS = [
     { folder: 'work1', displayTitle: 'OQ STYLE | Белый стиль', tags: ['Белый', 'Акварель', 'Минимализм'], previewNote: 'Элегантное белое приглашение' },
     { folder: 'work2', displayTitle: 'NAVKAR | Для друзей жениха', tags: ['Navkar', 'Классика', 'Шик'], previewNote: 'Стиль для друзей жениха' },
@@ -808,8 +813,8 @@ body.revealed footer {
     { folder: 'work4', displayTitle: 'OSHGA TAKLIFNOMA | Приглашение на плов', tags: ['Плов', 'Семья', 'Уют'], previewNote: 'Тёплое приглашение на плов' },
     { folder: 'work5', displayTitle: 'MUSLIM STYLE', tags: ['Исламский стиль', 'Дуа', 'Барокко'], previewNote: 'Духовная элегантность' },
     { folder: 'work6', displayTitle: 'OSHGA TAKLIF 2 | Приглашение на плов 2', tags: ['Плов', 'Гостеприимство', 'Орнамент'], previewNote: 'Щедрое приглашение на плов' },
-    { folder: 'work7', displayTitle: 'МИНИМАЛИСТИКА | Таклифнома', tags: ['Минимализм', 'Чистота', 'Типографика'], previewNote: 'Лаконичное приглашение' }
-    { folder: 'work8', displayTitle: 'МИНИМАЛИСТИКА | Таклифнома', tags: ['Минимализм', 'Чистота', 'Типографика'], previewNote: 'Новый' }
+    { folder: 'work7', displayTitle: 'МИНИМАЛИСТИКА | Таклифнома', tags: ['Минимализм', 'Чистота', 'Типографика'], previewNote: 'Лаконичное приглашение' },
+    { folder: 'work8', displayTitle: 'НОВЫЙ СТИЛЬ | Современный', tags: ['Современный', 'Стиль', 'Креатив'], previewNote: 'Новая работа 2025' }
   ];
   
   const grid = document.getElementById('grid');
@@ -820,7 +825,6 @@ body.revealed footer {
       card.className = 'work-card';
       card.style.animationDelay = (0.03 * idx) + 's';
       
-      // Внутреннее содержимое карточки
       card.innerHTML = `
         <div class="card-preview">
           <div class="work-num">0${num}</div>
@@ -839,7 +843,6 @@ body.revealed footer {
       
       // Клик по ВСЕЙ карточке открывает приглашение
       card.addEventListener('click', function(e) {
-        // Предотвращаем всплытие, если клик был на кнопке (но у нас нет кнопки)
         e.stopPropagation();
         openProject(proj.folder, proj.displayTitle);
       });
