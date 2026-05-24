@@ -93,7 +93,7 @@ body{background:var(--cream);font-family:'Jost',sans-serif;color:var(--text);ove
 }
 .scene.lit .scene-content{opacity:1;transform:translateY(0) scale(1);}
 
-/* S1 — ТОЛЬКО ВЕНОК ВРАЩАЕТСЯ КАК МАЯТНИК */
+/* S1 — ВЕНОК */
 .s1{background:var(--cream);padding:56px 24px 48px;flex-direction:column;text-align:center}
 .wreath-wrap{
   position:relative;
@@ -104,7 +104,6 @@ body{background:var(--cream);font-family:'Jost',sans-serif;color:var(--text);ove
   width:100%;
   display:block;
   border-radius:20px;
-  box-shadow:none;
   animation: pendulumRotate 5s ease-in-out infinite;
   transform-origin: center center;
 }
@@ -138,7 +137,7 @@ body{background:var(--cream);font-family:'Jost',sans-serif;color:var(--text);ove
 @keyframes arrd{0%{opacity:0;transform:rotate(45deg) translate(-3px,-3px)}50%{opacity:.7}100%{opacity:0;transform:rotate(45deg) translate(3px,3px)}}
 
 /* S2 */
-.s2{background:var(--blush);padding:68px 28px;flex-direction:column;text-align:center}
+.s2{background:var(--cream);padding:68px 28px;flex-direction:column;text-align:center}
 .from-lbl{font-family:'Great Vibes',cursive;font-size:clamp(2rem,8vw,2.8rem);color:var(--rose-dark);margin-bottom:12px;line-height:1.2}
 .invite-text-long{
   font-family:'Cormorant Garamond',serif;font-style:italic;
@@ -153,11 +152,10 @@ body{background:var(--cream);font-family:'Jost',sans-serif;color:var(--text);ove
 .ayat-t{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.88rem;color:var(--text);line-height:1.9;opacity:.82}
 .ayat-r{font-size:.58rem;letter-spacing:.3em;text-transform:uppercase;color:var(--rose-light);margin-top:6px;display:block}
 
-/* S3 */
+/* S3 — ТАЙМЕР (СВЕТЛЫЙ ФОН, КАК ВЕЗДЕ) */
 .s3{
-  background: #000000;
-  padding:0;
-  margin:0;
+  background:var(--cream);
+  padding:80px 24px;
   min-height:100vh;
   display:flex;
   align-items:center;
@@ -165,37 +163,97 @@ body{background:var(--cream);font-family:'Jost',sans-serif;color:var(--text);ove
   position:relative;
   overflow:hidden;
 }
-.s3-fullscreen-img{
-  position:absolute;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  z-index:1;
-  display:block;
-  opacity:0;
-  transition: opacity 1.4s cubic-bezier(0.2, 0.9, 0.4, 1);
+.s3::before{
+  background: radial-gradient(ellipse 70% 50% at 50% 50%, rgba(158,84,104,0.08) 0%, transparent 70%);
+  z-index:2;
 }
+.s3.lit::before{opacity:0}
 .s3 .scene-content{
+  text-align:center;
   position:relative;
-  z-index:3;
-  width:100%;
-  min-height:100vh;
-  background: transparent;
-  opacity:1;
-  transform:none;
+  z-index:5;
 }
-.s3::before {
-  background: radial-gradient(ellipse 75% 60% at 50% 50%, #0a0508 0%, #000000 100%);
-  transition: opacity 1.4s cubic-bezier(0.2, 0.9, 0.3, 1);
-  z-index: 2;
+.timer-title{
+  font-family:'Great Vibes',cursive;
+  font-size:clamp(1.6rem,6vw,2.4rem);
+  color:var(--rose-dark);
+  margin-bottom:48px;
+  letter-spacing:2px;
+  opacity:0;
+  animation:fadeUpTimer 0.8s 0.3s ease forwards;
 }
-.s3.lit::before { opacity: 0; }
-.s3.lit .s3-fullscreen-img { opacity: 1; }
+@keyframes fadeUpTimer{
+  from{opacity:0;transform:translateY(20px)}
+  to{opacity:1;transform:translateY(0)}
+}
+.timer-container{
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+  gap:16px;
+  flex-wrap:wrap;
+  margin-bottom:40px;
+}
+.timer-block{
+  background:rgba(158,84,104,0.08);
+  backdrop-filter:blur(4px);
+  border-radius:20px;
+  padding:20px 16px;
+  min-width:90px;
+  border:1px solid rgba(158,84,104,0.2);
+  transition:all 0.3s ease;
+}
+.timer-block:hover{
+  transform:translateY(-5px);
+  background:rgba(158,84,104,0.12);
+  border-color:rgba(158,84,104,0.35);
+}
+.timer-number{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(2.5rem,8vw,4rem);
+  font-weight:600;
+  color:var(--rose-dark);
+  line-height:1;
+  letter-spacing:4px;
+  display:block;
+}
+.timer-label{
+  font-family:'Jost',sans-serif;
+  font-size:0.65rem;
+  letter-spacing:0.3em;
+  text-transform:uppercase;
+  color:var(--text-light);
+  margin-top:12px;
+  display:block;
+}
+.timer-heart{
+  display:flex;
+  justify-content:center;
+  gap:12px;
+  margin-top:20px;
+  opacity:0.6;
+}
+.timer-heart span{
+  font-size:1.2rem;
+  animation:heartPulse 1.5s ease-in-out infinite;
+}
+.timer-heart span:nth-child(2){animation-delay:0.3s}
+.timer-heart span:nth-child(3){animation-delay:0.6s}
+@keyframes heartPulse{
+  0%,100%{opacity:0.4;transform:scale(1)}
+  50%{opacity:1;transform:scale(1.2)}
+}
+.timer-sub{
+  font-family:'Cormorant Garamond',serif;
+  font-style:italic;
+  font-size:0.9rem;
+  color:var(--text-light);
+  margin-top:32px;
+  letter-spacing:1px;
+}
 
 /* S4 */
-.s4{background:var(--blush);padding:58px 22px;flex-direction:column;text-align:center}
+.s4{background:var(--cream);padding:58px 22px;flex-direction:column;text-align:center}
 .pin{font-size:1.9rem;margin-bottom:12px;display:block}
 .v-lbl{font-size:.52rem;letter-spacing:.5em;text-transform:uppercase;color:var(--text-light);margin-bottom:5px}
 .v-name{font-family:'Great Vibes',cursive;font-size:clamp(2rem,8vw,2.9rem);color:var(--rose-dark);line-height:1.1}
@@ -209,7 +267,7 @@ body{background:var(--cream);font-family:'Jost',sans-serif;color:var(--text);ove
 .map-btn.google{background:#4285f4}
 
 /* S5 */
-.s5{background:#fdf5f6;padding:64px 28px 72px;flex-direction:column;text-align:center}
+.s5{background:var(--cream);padding:64px 28px 72px;flex-direction:column;text-align:center}
 .cl-header{width:min(340px,90vw);margin:0 auto 0}
 .cl-header img{width:100%;display:block}
 .cl-hurmat{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.95rem;color:var(--text-light);letter-spacing:.06em;margin-top:24px}
@@ -217,14 +275,13 @@ body{background:var(--cream);font-family:'Jost',sans-serif;color:var(--text);ove
 .cl-wait{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.05rem;color:var(--text);letter-spacing:.04em;margin-top:24px;line-height:1.8}
 .cl-heart{font-size:1.5rem;display:block;margin:18px auto 0;animation:hbeat 1.7s ease-in-out infinite;color:var(--rose)}
 .cl-credit{margin-top:36px;font-size:.48rem;letter-spacing:.3em;text-transform:uppercase;color:rgba(154,128,144,.28)}
-/* ЯРКИЙ АВТОРСКИЙ БЛОК */
 .creator-credit {
   margin-top: 20px;
   text-align: center;
   font-size: 0.65rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: #b55a48;  /* яркий розово-коричневый */
+  color: #b55a48;
   background: rgba(250,240,235,0.7);
   backdrop-filter: blur(3px);
   display: inline-block;
@@ -242,9 +299,7 @@ body{background:var(--cream);font-family:'Jost',sans-serif;color:var(--text);ove
   border-color: #b55a48;
   transform: scale(1.02);
 }
-.creator-credit:active {
-  transform: scale(0.97);
-}
+.creator-credit:active { transform: scale(0.97); }
 
 .music-btn{
   position:fixed;
@@ -337,9 +392,33 @@ body{background:var(--cream);font-family:'Jost',sans-serif;color:var(--text);ove
     </div>
   </div>
 
+  <!-- S3 — ТАЙМЕР (СВЕТЛЫЙ ФОН) -->
   <div class="scene s3" id="s3">
-    <img class="s3-fullscreen-img" id="mainPhoto" src="photo.png" alt="Abdullaziz & Begoyim" loading="eager">
-    <div class="scene-content"></div>
+    <div class="scene-content">
+      <div class="timer-title">To'yga qadar</div>
+      <div class="timer-container">
+        <div class="timer-block">
+          <span class="timer-number" id="timerDays">00</span>
+          <span class="timer-label">Kun</span>
+        </div>
+        <div class="timer-block">
+          <span class="timer-number" id="timerHours">00</span>
+          <span class="timer-label">Soat</span>
+        </div>
+        <div class="timer-block">
+          <span class="timer-number" id="timerMinutes">00</span>
+          <span class="timer-label">Daqiqa</span>
+        </div>
+        <div class="timer-block">
+          <span class="timer-number" id="timerSeconds">00</span>
+          <span class="timer-label">Soniya</span>
+        </div>
+      </div>
+      <div class="timer-heart">
+        <span>❤️</span><span>❤️</span><span>❤️</span>
+      </div>
+      <div class="timer-sub">Abdullaziz & Begoyim nikoh to'yi</div>
+    </div>
   </div>
 
   <div class="scene s4" id="s4">
@@ -374,13 +453,41 @@ body{background:var(--cream);font-family:'Jost',sans-serif;color:var(--text);ove
   <div class="bars"><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div></div>
 </div>
 
-<!-- МУЗЫКА ПО ВАШЕЙ ССЫЛКЕ -->
 <audio id="bgAudio" loop preload="auto">
   <source src="https://file.garden/ahHpxrRCKDJxc-tU/muzyka_LGehUN90.mp3" type="audio/mpeg">
 </audio>
 
 <script>
 (function(){
+  // ========== ТАЙМЕР ==========
+  const targetDate = new Date(2026, 5, 16, 12, 0, 0).getTime();
+  
+  function updateTimer() {
+    const now = new Date().getTime();
+    const diff = targetDate - now;
+    
+    if (diff <= 0) {
+      document.getElementById('timerDays').textContent = '00';
+      document.getElementById('timerHours').textContent = '00';
+      document.getElementById('timerMinutes').textContent = '00';
+      document.getElementById('timerSeconds').textContent = '00';
+      return;
+    }
+    
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+    
+    document.getElementById('timerDays').textContent = String(days).padStart(2, '0');
+    document.getElementById('timerHours').textContent = String(hours).padStart(2, '0');
+    document.getElementById('timerMinutes').textContent = String(minutes).padStart(2, '0');
+    document.getElementById('timerSeconds').textContent = String(seconds).padStart(2, '0');
+  }
+  
+  updateTimer();
+  setInterval(updateTimer, 1000);
+  
   // ========== МУЗЫКА ==========
   const audio = document.getElementById('bgAudio');
   let musicPlaying = false;
@@ -396,9 +503,7 @@ body{background:var(--cream);font-family:'Jost',sans-serif;color:var(--text);ove
     audio.play().then(() => {
       musicPlaying = true;
       if(musicBtn) musicBtn.classList.add('playing');
-      console.log('✅ МУЗЫКА ИГРАЕТ!');
     }).catch(err => {
-      console.log('Ошибка: ' + err.message);
       setTimeout(() => {
         audio.play().then(() => {
           musicPlaying = true;
@@ -422,19 +527,18 @@ body{background:var(--cream);font-family:'Jost',sans-serif;color:var(--text);ove
   
   if(musicBtn) musicBtn.addEventListener('click', (e) => { e.stopPropagation(); toggleMusic(); });
   
-  // ========== ЛЕПЕСТКИ (РОЗОВЫЕ, ЯРКИЕ) ==========
+  // ========== ЛЕПЕСТКИ ==========
   const pc = document.getElementById("petalsCanvas");
   if(pc) {
     const ctx = pc.getContext("2d");
     let W, H, petals = [];
     function resize() { W = pc.width = window.innerWidth; H = pc.height = window.innerHeight; }
-    // НАСЫЩЕННЫЕ РОЗОВЫЕ ОТТЕНКИ
     const COLS = ["#ff69b4", "#ff85c1", "#ff99cc", "#ffb3d9", "#ffcce6", "#ff6eb4", "#ff80c5"];
     class Petal{
       constructor(init){ 
         this.x = Math.random() * W; 
         this.y = init ? Math.random() * H : -20; 
-        this.sz = 5 + Math.random() * 12;  // чуть крупнее
+        this.sz = 5 + Math.random() * 12;
         this.vy = 0.35 + Math.random() * 0.9; 
         this.vx = (Math.random() - 0.5) * 0.45; 
         this.rot = Math.random() * Math.PI * 2; 
@@ -442,7 +546,7 @@ body{background:var(--cream);font-family:'Jost',sans-serif;color:var(--text);ove
         this.sw = Math.random() * 0.45; 
         this.swT = Math.random() * Math.PI * 2; 
         this.swS = 0.005 + Math.random() * 0.01; 
-        this.a = 0.5 + Math.random() * 0.45;   // более заметные
+        this.a = 0.5 + Math.random() * 0.45;
         this.c = COLS[Math.floor(Math.random() * COLS.length)];
       }
       update(){ 
@@ -467,7 +571,7 @@ body{background:var(--cream);font-family:'Jost',sans-serif;color:var(--text);ove
         ctx.restore(); 
       }
     }
-    function initPetals(){ petals = Array.from({ length: 60 }, () => new Petal(true)); } // больше лепестков
+    function initPetals(){ petals = Array.from({ length: 60 }, () => new Petal(true)); }
     function anim(){ ctx.clearRect(0, 0, W, H); petals.forEach(p => { p.update(); p.draw(); }); requestAnimationFrame(anim); }
     resize(); initPetals(); anim();
     window.addEventListener("resize", () => { resize(); initPetals(); });
@@ -507,9 +611,6 @@ body{background:var(--cream);font-family:'Jost',sans-serif;color:var(--text);ove
       window.open('https://t.me/Dma12r', '_blank');
     });
   }
-  
-  const mainPhoto = document.getElementById('mainPhoto');
-  if(mainPhoto) mainPhoto.onerror = function() { this.style.opacity = '0.6'; this.style.backgroundColor = '#2a1a20'; };
 })();
 </script>
 </body>
